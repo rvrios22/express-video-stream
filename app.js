@@ -5,9 +5,10 @@ const PORT = 3001;
 
 app.use('/video', videoRoutes)
 
-
-app.get('/', (req, res) => {
-    res.send('hello world')
+app.use((req, res, next) => {
+    // if (!res.headersSent) {
+        res.status(404).json({ error: 'Not found' })
+    // }
 })
 
 app.listen(PORT, () => {
