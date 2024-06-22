@@ -1,17 +1,21 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import Rooter from './routes/Rooter'
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-
+import HomePage from "./routes/HomePage";
+import Video from "./routes/Video";
 const router = createBrowserRouter([
   {
-    path:'/',
-    element: <Rooter />
-  }
-])
+    path: "/",
+    element: <HomePage />,
+  },
+  {
+    path: "/video/:id",
+    element: <Video />,
+  },
+]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router}/>
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
