@@ -1,10 +1,18 @@
 const express = require('express');
 const app = express();
+const cors = require('cors')
+const apiRoutes = require('./routes/api')
 const videoRoutes = require('./routes/video')
-const videoMetadata = require('./public/videoMetaData')
 const PORT = 3001;
 
+app.use(cors())
 app.use(express.json())
+
+app.use('/video', videoRoutes)
+app.use('/api', apiRoutes)
+
+//serve static files out of public directory
+app.use(express.static('public'))
 
 //log incoming requests
 app.use((req, res, next) => {
@@ -34,15 +42,9 @@ app.use((req, res, next) => {
     next()
 })
 
-app.use('/video', videoRoutes)
-app.get('/api/video', (req, res) => {
-    res.json(videoMetadata)
-})
 
 app.use((req, res, next) => {
-    // if (!res.headersSent) {
     res.status(404).json({ error: 'Not found' })
-    // }
 })
 
 app.listen(PORT, () => {

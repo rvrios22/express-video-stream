@@ -1,0 +1,12 @@
+:root {
+    text-align: center;
+}
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1em;
+}
+
+.thumbnail-container img:hover {
+    cursor: pointer;
+}

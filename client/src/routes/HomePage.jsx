@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import VideoDisplay from "../components/VideoDisplay";
+import VideoUpload from "../components/VideoUpload";
 
 function HomePage() {
   const [videoData, setVideoData] = useState([]);
@@ -20,15 +21,8 @@ function HomePage() {
   }, []);
   return (
     <>
-      <h1>Choose A Video</h1>
-      {videoData.map((data) => (
-        <div key={data.id}>
-          <Link to={data.location}>
-            <img src={data.thumbnail} alt={data.description} />
-            <h3>{data.title}</h3>
-          </Link>
-        </div>
-      ))}
+      <VideoDisplay videoData={videoData}/>
+      <VideoUpload />
     </>
   );
 }

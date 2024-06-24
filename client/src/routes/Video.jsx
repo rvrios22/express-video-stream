@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import VideoPlayer from "../components/VideoPlayer";
+import { useLocation } from "react-router-dom";
 
 function Video() {
-  return <VideoPlayer />;
+  const location = useLocation();
+
+  return <VideoPlayer location={location.pathname} />;
 }
 
 export default Video;
