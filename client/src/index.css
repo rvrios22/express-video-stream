@@ -10,3 +10,8 @@
 .thumbnail-container img:hover {
     cursor: pointer;
 }
+
+input {
+    display: block;
+    margin: 0 auto;
+}
