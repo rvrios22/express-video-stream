@@ -16,11 +16,12 @@ router.get('/video', (req, res) => {
 router.post('/video/upload', multer.single('video'), (req, res) => {
     const file = req.file
     const { description, title } = req.body
-    if(!file) {
-        res.status(400).send('No file uplaoded')
-    }
+    // if(!file) {
+    //     res.status(400).send('No file uplaoded')
+    // }
 
-    console.log(req.body)
+    console.log('body', req.body)
+    console.log('file', file)
 
     // const newVideo = {
     //     id: videoMetadata.length + 1,
