@@ -31,29 +31,22 @@ function VideoUpload() {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-
-    const formData = new FormData();
-
-    formData.append("title", formData.title);
-    formData.append("description", formData.description);
-    formData.append("video", formData.video);
-
-    console.log(formData.entries)
+    const formEntries = new FormData();
+    formEntries.append("title", formData.title);
+    formEntries.append("description", formData.description);
+    formEntries.append("video", formData.video);
     try {
       const response = await fetch("http://localhost:3001/api/video/upload", {
         method: "POST",
-        body: formData,
+        body: formEntries,
       });
       if (!response.ok) {
-        throw new Error("upload failed");
+        throw new Error(`Response Error: ${response.status}`);
       }
       const result = await response.json();
-      setMessage(`Upload successful: ${result.title}`);
+      setMessage(`upload successfull: ${result.title}`);
     } catch (err) {
-      console.error("error uploading", err);
-      setMessage("error uploading");
-    } finally {
-      setFormData({ title: "", description: "", video: null });
+      console.error(err);
     }
   };
 
