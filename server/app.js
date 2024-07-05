@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const cors = require('cors')
+const db = require('./models')
 const apiRoutes = require('./routes/api')
 const videoRoutes = require('./routes/video')
 const PORT = 3001;
@@ -10,6 +11,12 @@ app.use(express.json())
 
 app.use('/video', videoRoutes)
 app.use('/api', apiRoutes)
+
+//sync db
+// (async () => {
+//     await db.sequelize.sync()
+// })()
+
 
 //serve static files out of public directory
 app.use(express.static('public'))
