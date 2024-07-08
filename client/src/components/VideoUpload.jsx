@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 function VideoUpload() {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
+    folder: "",
     video: null,
   });
   const [message, setMessage] = useState("");
@@ -28,6 +29,16 @@ function VideoUpload() {
       video: e.target.files[0],
     });
   };
+
+  useEffect(() => {
+    const fetchFolders = async (req, res) => {
+      const response = await fetch('http://localhost:3001/api/folders')
+      const data = await response.json()
+      console.log(data)
+    }
+
+    fetchFolders()
+  }, [])
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
