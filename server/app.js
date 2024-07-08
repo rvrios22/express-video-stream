@@ -13,10 +13,9 @@ app.use('/video', videoRoutes)
 app.use('/api', apiRoutes)
 
 //sync db
-// (async () => {
-//     await db.sequelize.sync()
-// })()
-
+db.sequelize.sync({ alter: false, force: false }).then(() => {
+    console.log('DB synced')
+})
 
 //serve static files out of public directory
 app.use(express.static('public'))

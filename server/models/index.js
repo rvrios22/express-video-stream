@@ -10,6 +10,6 @@ const db = {}
 db.sequelize = sequelize
 db.models = {}
 db.models.User = require('./user')(sequelize, Sequelize.DataTypes)
-// db.models.Video = require('./video')(sequelize, Sequelize.DataTypes)
+db.models.Video = require('./video')(sequelize, Sequelize.DataTypes)
 
 module.exports = db
