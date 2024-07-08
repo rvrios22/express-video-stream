@@ -5,10 +5,10 @@ const fs = require('fs');
 const videoMetadata = require('../public/videoMetaData')
 const multer = require('../multer')
 
-router.get('/', (req, res) => {
-    res.send('hello')
-    console.log(multer)
+router.get('/folders', (req, res) => {
+    res.json({ message: 'helo' })
 })
+
 router.get('/video', (req, res) => {
     res.json(videoMetadata)
 })

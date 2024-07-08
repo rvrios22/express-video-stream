@@ -5,7 +5,7 @@ const router = express.Router()
 
 router.get('/:videoName', (req, res) => {
     const videoName = req.params.videoName
-    const videoPath = path.join(__dirname, '..', 'video', videoName)
+    const videoPath = path.join(__dirname, '..', 'public', 'video', videoName)
 
     fs.stat(videoPath, (err, stat) => {
         if(err) {
