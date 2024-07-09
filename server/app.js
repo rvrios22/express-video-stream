@@ -13,7 +13,7 @@ app.use('/video', videoRoutes)
 app.use('/api', apiRoutes)
 
 //sync db
-db.sequelize.sync({ alter: false, force: false }).then(() => {
+db.sequelize.sync({ alter: true, force: true }).then(() => {
     console.log('DB synced')
 })
 
