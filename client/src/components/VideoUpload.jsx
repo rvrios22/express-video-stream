@@ -23,6 +23,13 @@ function VideoUpload() {
     });
   };
 
+  const handleFolderChange = (e) => {
+    setFormData({
+      ...formData,
+      folder: e.target.value,
+    });
+  };
+
   const handleVideoChange = (e) => {
     setFormData({
       ...formData,
@@ -32,22 +39,23 @@ function VideoUpload() {
 
   useEffect(() => {
     const fetchFolders = async (req, res) => {
-      const response = await fetch('http://localhost:3001/api/folders')
-      const data = await response.json()
-      console.log(data)
-    }
+      const response = await fetch("http://localhost:3001/api/folders");
+      const data = await response.json();
+      console.log(data);
+    };
 
-    fetchFolders()
-  }, [])
+    fetchFolders();
+  }, []);
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     const formEntries = new FormData();
     formEntries.append("title", formData.title);
     formEntries.append("description", formData.description);
+    formEntries.append("folder", formData.folder);
     formEntries.append("video", formData.video);
     try {
-      const response = await fetch("http://localhost:3001/api/video/upload", {
+      const response = await fetch("http://localhost:3001/video/upload", {
         method: "POST",
         body: formEntries,
       });
@@ -58,6 +66,8 @@ function VideoUpload() {
       setMessage(`upload successfull: ${result.title}`);
     } catch (err) {
       console.error(err);
+    } finally {
+      setFormData({ title: "", description: "", folder: "", video: null });
     }
   };
 
@@ -85,6 +95,12 @@ function VideoUpload() {
           required
           onChange={handleDescriptionChange}
         />
+        <label htmlFor="folder">Choose a Folder:</label>
+        <input list="folder" name="folder" onChange={handleFolderChange} />
+        <datalist id="folder">
+          <option value="general" />
+          <option value="genesis" />
+        </datalist>
         <label htmlFor="video">Choose a Video: </label>
         <input
           type="file"

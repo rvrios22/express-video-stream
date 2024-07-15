@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path')
 const fs = require('fs');
 const router = express.Router()
+const multer = require('../multer')
 
 router.get('/:videoName', (req, res) => {
     const videoName = req.params.videoName
@@ -48,6 +49,28 @@ router.get('/:videoName', (req, res) => {
         res.writeHead(200, head)
         fs.createReadStream(videoPath).pipe(res)
     }
+})
+
+router.post('/upload', multer.single('video'), (req, res) => {
+    const file = req.file
+    const { description, title } = req.body
+    // if(!file) {
+    //     res.status(400).send('No file uplaoded')
+    // }
+
+    console.log('body', req.body)
+    console.log('file', file)
+
+    // const newVideo = {
+    //     id: videoMetadata.length + 1,
+    //     location: `video/${file.filename}`,
+    //     title: title,
+    //     description: description,
+    //     thumbnail: null
+    // }
+
+    // videoMetadata.push(newVideo)
+    // res.status(201).json(newVideo)
 })
 
 module.exports = router

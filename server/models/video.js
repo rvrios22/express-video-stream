@@ -5,12 +5,5 @@ module.exports = (sequelize, DataTypes) => {
         videoPath: DataTypes.STRING,
         thumbnailPath: DataTypes.STRING,
     }, {})
-
-    Video.associate = (models) => {
-        Video.belongsTo(models.Folder, {
-            foreignKey: 'folderId',
-            as: 'folder'
-        })
-    }
     return Video
 }

@@ -3,14 +3,16 @@ const app = express();
 const cors = require('cors')
 const db = require('./models')
 const apiRoutes = require('./routes/api')
+const folderRoutes = require('./routes/folder')
 const videoRoutes = require('./routes/video')
 const PORT = 3001;
 
 app.use(cors())
 app.use(express.json())
 
-app.use('/video', videoRoutes)
 app.use('/api', apiRoutes)
+app.use('/folder', folderRoutes)
+app.use('/video', videoRoutes)
 
 //sync db
 db.sequelize.sync({ alter: true, force: true }).then(() => {

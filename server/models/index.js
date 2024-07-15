@@ -13,4 +13,7 @@ db.models.User = require('./user')(sequelize, Sequelize.DataTypes)
 db.models.Video = require('./video')(sequelize, Sequelize.DataTypes)
 db.models.Folder = require('./folder')(sequelize, Sequelize.DataTypes)
 
+db.models.Folder.hasMany(db.models.Video)
+db.models.Video.belongsTo(db.models.Folder)
+
 module.exports = db
