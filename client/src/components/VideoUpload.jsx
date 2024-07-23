@@ -52,7 +52,7 @@ function VideoUpload() {
     const formEntries = new FormData();
     formEntries.append("title", formData.title);
     formEntries.append("description", formData.description);
-    formEntries.append("folder", formData.folder);
+    formEntries.append("folderName", formData.folder);
     formEntries.append("video", formData.video);
     try {
       const response = await fetch("http://localhost:3001/video/upload", {
