@@ -15,8 +15,9 @@ app.use('/folder', folderRoutes)
 app.use('/video', videoRoutes)
 
 //sync db
-db.sequelize.sync({ alter: true, force: true }).then(() => {
+db.sequelize.sync({ alter: true, }).then(() => {
     console.log('DB synced')
+    // db.models.Folder.create({ name: 'general', })
 })
 
 //serve static files out of public directory

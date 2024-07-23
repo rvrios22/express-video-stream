@@ -3,13 +3,17 @@ const path = require('path')
 const fs = require('fs');
 const router = express.Router()
 const multer = require('../multer')
+const db = require('../models');
+
+const Video = db.models.Video
+const Folder = db.models.Folder
 
 router.get('/:videoName', (req, res) => {
     const videoName = req.params.videoName
     const videoPath = path.join(__dirname, '..', 'public', 'video', videoName)
 
     fs.stat(videoPath, (err, stat) => {
-        if(err) {
+        if (err) {
             console.error(err)
             return res.status(404).send('Video file not found')
         }
@@ -51,26 +55,20 @@ router.get('/:videoName', (req, res) => {
     }
 })
 
-router.post('/upload', multer.single('video'), (req, res) => {
+router.post('/upload', multer.single('video'), async (req, res) => {
     const file = req.file
-    const { description, title } = req.body
-    // if(!file) {
-    //     res.status(400).send('No file uplaoded')
-    // }
+    const { description, title, folderName, } = req.body
 
-    console.log('body', req.body)
-    console.log('file', file)
-
-    // const newVideo = {
-    //     id: videoMetadata.length + 1,
-    //     location: `video/${file.filename}`,
-    //     title: title,
-    //     description: description,
-    //     thumbnail: null
-    // }
-
-    // videoMetadata.push(newVideo)
-    // res.status(201).json(newVideo)
+    try {
+        let folder = await Folder.findOne({ where: { name: folderName } })
+        if (!folder) {
+            folder = await Folder.create({ name: folderName })
+        }
+        const video = await Video.create({ title: title, description: description, folder: folder.id })
+        res.json({ success: true, video })
+    } catch (err) {
+        res.json(err)
+    }
 })
 
 module.exports = router
