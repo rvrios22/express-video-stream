@@ -3,7 +3,10 @@ const multer = require('multer')
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const uploadPath = 'public/video'
+        let uploadPath = 'public/video'
+        if(file.mimetype.startsWith('image/')) {
+            uploadPath = 'public/thumbnails'
+        }
         fs.mkdirSync(uploadPath, { recursive: true })
         cb(null, uploadPath)
     },

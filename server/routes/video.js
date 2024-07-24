@@ -55,29 +55,31 @@ router.get('/:videoName', (req, res) => {
     }
 })
 
-router.post('/upload', multer.single('video'), async (req, res) => {
-    const file = req.file
+router.post('/upload', multer.fields([{ name: 'video' }, { name: 'thumbnail' }]), async (req, res) => {
+    const files = req.files
     const { description, title, folderName } = req.body
+    console.log(files)
+    res.send('hello')
     // const thumbnailPath = path.join(__dirname, '..', 'public', 'thumbnails', thumbnaillName)
-    try {
-        let folder = await Folder.findOne({ where: { name: folderName } })
-        if (!folder) {
-            folder = await Folder.create({ name: folderName })
-        }
+    // try {
+    //     let folder = await Folder.findOne({ where: { name: folderName } })
+    //     if (!folder) {
+    //         folder = await Folder.create({ name: folderName })
+    //     }
 
-        const video = await Video.create({ 
-            title: title, 
-            description: description, 
-            folderId: folder.id, 
-            videoPath: file.path, 
-            // thumbnailPath: thumbnailPath 
-        })
-        // res.json({ success: true, video })
-        console.log(video)
-        res.send('test')
-    } catch (err) {
-        res.json(err)
-    }
+    //     const video = await Video.create({
+    //         title: title,
+    //         description: description,
+    //         folderId: folder.id,
+    //         videoPath: file.path,
+    //         // thumbnailPath: thumbnailPath 
+    //     })
+    //     // res.json({ success: true, video })
+    //     console.log(video)
+    //     res.send('test')
+    // } catch (err) {
+    //     res.json(err)
+    // }
 })
 
 module.exports = router
