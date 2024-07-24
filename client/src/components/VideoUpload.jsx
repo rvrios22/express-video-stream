@@ -6,6 +6,7 @@ function VideoUpload() {
     description: "",
     folder: "",
     video: null,
+    thumbnail: null,
   });
   const [message, setMessage] = useState("");
 
@@ -37,15 +38,22 @@ function VideoUpload() {
     });
   };
 
-  useEffect(() => {
-    const fetchFolders = async (req, res) => {
-      const response = await fetch("http://localhost:3001/api/folders");
-      const data = await response.json();
-      console.log(data);
-    };
+  const handleThumbnailChange = (e) => {
+    setFormData({
+      ...formData,
+      thumbnail: e.target.files[0],
+    });
+  };
 
-    fetchFolders();
-  }, []);
+  // useEffect(() => {
+  //   const fetchFolders = async (req, res) => {
+  //     const response = await fetch("http://localhost:3001/api/folders");
+  //     const data = await response.json();
+  //     console.log(data);
+  //   };
+
+  //   fetchFolders();
+  // }, []);
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -54,6 +62,7 @@ function VideoUpload() {
     formEntries.append("description", formData.description);
     formEntries.append("folderName", formData.folder);
     formEntries.append("video", formData.video);
+    formEntries.append('thumbnail', formData.thumbnail)
     try {
       const response = await fetch("http://localhost:3001/video/upload", {
         method: "POST",
@@ -106,8 +115,18 @@ function VideoUpload() {
           type="file"
           name="video"
           id="video"
+          accept="video/mp4"
           required
           onChange={handleVideoChange}
+        />
+        <label htmlFor="thumbnail">Choose a Thumbnail: </label>
+        <input
+          type="file"
+          name="thumbnail"
+          id="thumbnail"
+          accept="image/*"
+          required
+          onChange={handleThumbnailChange}
         />
         <input type="submit" value="Submit" />
       </form>
