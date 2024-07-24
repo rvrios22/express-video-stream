@@ -57,15 +57,24 @@ router.get('/:videoName', (req, res) => {
 
 router.post('/upload', multer.single('video'), async (req, res) => {
     const file = req.file
-    const { description, title, folderName, } = req.body
-
+    const { description, title, folderName } = req.body
+    // const thumbnailPath = path.join(__dirname, '..', 'public', 'thumbnails', thumbnaillName)
     try {
         let folder = await Folder.findOne({ where: { name: folderName } })
         if (!folder) {
             folder = await Folder.create({ name: folderName })
         }
-        const video = await Video.create({ title: title, description: description, folder: folder.id })
-        res.json({ success: true, video })
+
+        const video = await Video.create({ 
+            title: title, 
+            description: description, 
+            folderId: folder.id, 
+            videoPath: file.path, 
+            // thumbnailPath: thumbnailPath 
+        })
+        // res.json({ success: true, video })
+        console.log(video)
+        res.send('test')
     } catch (err) {
         res.json(err)
     }

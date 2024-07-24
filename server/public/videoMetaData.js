@@ -19,6 +19,13 @@ const videoMetadata = [
         title: 'Sample Video 3',
         description: 'This is the third sample video.',
         thumbnail: '/thumbnails/sample3.jpg'
+    },
+    {
+        id: 4,
+        location: '/video/1721051179303-nodeVideo.mp4',
+        title: 'Sample Video 4',
+        description: 'This is the 4 sample video.',
+        thumbnail: '/thumbnails/sample1.jpg'
     }
 ];
 
