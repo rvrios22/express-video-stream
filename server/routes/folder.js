@@ -5,9 +5,12 @@ const db = require('../models')
 const Folder = db.models.Folder
 
 router.get('/', async (req, res) => {
-    const { folderName } = req.body
-    const folder = await Folder.findOne({ where: { name: folderName }})
-    res.json({ folder })
+    try {
+        const folders = await Folder.findAll()
+        res.json({ success: true, folders })
+    } catch (err) {
+        res.status(500).json({ success: false, err })
+    }
 })
 
 module.exports = router

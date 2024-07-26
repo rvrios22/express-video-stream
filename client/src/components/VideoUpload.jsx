@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-function VideoUpload() {
+function VideoUpload({ folderData }) {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -45,16 +45,6 @@ function VideoUpload() {
     });
   };
 
-  // useEffect(() => {
-  //   const fetchFolders = async (req, res) => {
-  //     const response = await fetch("http://localhost:3001/api/folders");
-  //     const data = await response.json();
-  //     console.log(data);
-  //   };
-
-  //   fetchFolders();
-  // }, []);
-
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     const formEntries = new FormData();
@@ -62,7 +52,7 @@ function VideoUpload() {
     formEntries.append("description", formData.description);
     formEntries.append("folderName", formData.folder);
     formEntries.append("video", formData.video);
-    formEntries.append('thumbnail', formData.thumbnail)
+    formEntries.append("thumbnail", formData.thumbnail);
     try {
       const response = await fetch("http://localhost:3001/video/upload", {
         method: "POST",
@@ -73,10 +63,22 @@ function VideoUpload() {
       }
       const result = await response.json();
       setMessage(`upload successfull: ${result.title}`);
+      setFormData({
+        title: "",
+        description: "",
+        folder: "",
+        video: null,
+        thumbnail: null,
+      });
     } catch (err) {
       console.error(err);
-    } finally {
-      setFormData({ title: "", description: "", folder: "", video: null });
+      setFormData({
+        title: "",
+        description: "",
+        folder: "",
+        video: null,
+        thumbnail: null,
+      });
     }
   };
 
@@ -107,8 +109,11 @@ function VideoUpload() {
         <label htmlFor="folder">Choose a Folder:</label>
         <input list="folder" name="folder" onChange={handleFolderChange} />
         <datalist id="folder">
-          <option value="general" />
-          <option value="genesis" />
+          {folderData.map((folder) => (
+            <>
+              <option>{folder.name}</option>
+            </>
+          ))}
         </datalist>
         <label htmlFor="video">Choose a Video: </label>
         <input

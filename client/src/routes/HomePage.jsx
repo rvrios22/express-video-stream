@@ -4,25 +4,41 @@ import VideoUpload from "../components/VideoUpload";
 
 function HomePage() {
   const [videoData, setVideoData] = useState([]);
+  const [folderData, setFolderData] = useState([]);
+  //fetches video data
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:3001/api/video");
+        const response = await fetch("http://localhost:3001/video");
         if (!response.ok) {
           throw new Error("Network response not ok");
         }
         const data = await response.json();
-        setVideoData(data);
+        setVideoData(data.videos);
       } catch (err) {
         console.error("something went wrong", err);
       }
     };
     fetchData();
   }, []);
+
+  //fetches folder data
+  useEffect(() => {
+    const fetchFolders = async () => {
+      const response = await fetch("http://localhost:3001/folder");
+      if (!response.ok) {
+        throw new Error("Network response not okay");
+      }
+      const data = await response.json();
+      setFolderData(data.folders);
+    };
+
+    fetchFolders();
+  }, []);
   return (
     <>
-      <VideoDisplay videoData={videoData}/>
-      <VideoUpload />
+      <VideoDisplay videoData={videoData} />
+      <VideoUpload folderData={folderData} />
     </>
   );
 }

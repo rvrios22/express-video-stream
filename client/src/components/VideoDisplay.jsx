@@ -8,9 +8,9 @@ function VideoDisplay({ videoData }) {
       <main className="grid">
         {videoData.map((data) => (
           <div key={data.id} className="thumbnail-container">
-            <Link to={data.location}>
+            <Link to={data.videoPath}>
               <img
-                src={`http://localhost:3001${data.thumbnail}`}
+                src={`http://localhost:3001${data.thumbnailPath}`}
                 alt={data.description}
                 width="300px"
               />

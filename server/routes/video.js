@@ -1,12 +1,22 @@
 const express = require('express');
-const path = require('path')
-const fs = require('fs');
 const router = express.Router()
-const multer = require('../multer')
 const db = require('../models');
+const fs = require('fs');
+const helpers = require('../helpers')
+const multer = require('../multer')
+const path = require('path')
 
 const Video = db.models.Video
 const Folder = db.models.Folder
+
+router.get('/', async (req, res) => {
+    try {
+        const videos = await Video.findAll()
+        res.status(200).json({ success: true, videos })
+    } catch (err) {
+        res.status(500).json({ success: false, err })
+    }
+})
 
 router.get('/:videoName', (req, res) => {
     const videoName = req.params.videoName
@@ -58,28 +68,26 @@ router.get('/:videoName', (req, res) => {
 router.post('/upload', multer.fields([{ name: 'video' }, { name: 'thumbnail' }]), async (req, res) => {
     const files = req.files
     const { description, title, folderName } = req.body
-    console.log(files)
-    res.send('hello')
-    // const thumbnailPath = path.join(__dirname, '..', 'public', 'thumbnails', thumbnaillName)
-    // try {
-    //     let folder = await Folder.findOne({ where: { name: folderName } })
-    //     if (!folder) {
-    //         folder = await Folder.create({ name: folderName })
-    //     }
+    const paths = helpers.getPaths(files)
+    const modifedPaths = helpers.removePublicFromPath(paths)
 
-    //     const video = await Video.create({
-    //         title: title,
-    //         description: description,
-    //         folderId: folder.id,
-    //         videoPath: file.path,
-    //         // thumbnailPath: thumbnailPath 
-    //     })
-    //     // res.json({ success: true, video })
-    //     console.log(video)
-    //     res.send('test')
-    // } catch (err) {
-    //     res.json(err)
-    // }
+    try {
+        let folder = await Folder.findOne({ where: { name: folderName } })
+        if (!folder) {
+            folder = await Folder.create({ name: folderName })
+        }
+
+        const video = await Video.create({
+            title: title,
+            description: description,
+            folderId: folder.id,
+            videoPath: modifedPaths[0],
+            thumbnailPath: modifedPaths[1]
+        })
+        res.json({ success: true, video })
+    } catch (err) {
+        res.json(err)
+    }
 })
 
 module.exports = router
