@@ -18,9 +18,14 @@ router.get('/', async (req, res) => {
     }
 })
 
-router.get('/:videoName', (req, res) => {
-    const videoName = req.params.videoName
-    const videoPath = path.join(__dirname, '..', 'public', 'video', videoName)
+router.get('/:id', async (req, res) => {
+    const videoId = req.params.id
+    const video = await Video.findOne({
+        where:
+            { id: videoId }
+    })
+
+    const videoPath = `public/${video.videoPath}`
 
     fs.stat(videoPath, (err, stat) => {
         if (err) {
@@ -32,17 +37,17 @@ router.get('/:videoName', (req, res) => {
     const stat = fs.statSync(videoPath);
     const fileSize = stat.size
     const range = req.headers.range;
-
+    
     if (range) {
         const parts = range.replace(/bytes=/, '').split('-')
         const start = parseInt(parts[0], 10);
         const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
-
+        
         if (start >= fileSize) {
             res.status(416).send(`Requested range not satisfiable\n ${start} >= ${fileSize}`)
             return
         }
-
+        
         const chucnkSize = (end - start) + 1
         const file = fs.createReadStream(videoPath, { start, end })
         const head = {
@@ -51,10 +56,10 @@ router.get('/:videoName', (req, res) => {
             'Content-Length': chucnkSize,
             'Content-Type': 'video/mp4'
         }
-
+        
         res.writeHead(206, head)
         file.pipe(res)
-
+        
     } else {
         const head = {
             'Content-Length': fileSize,
@@ -89,5 +94,7 @@ router.post('/upload', multer.fields([{ name: 'video' }, { name: 'thumbnail' }])
         res.json(err)
     }
 })
+
+router.delete('/:videoName')
 
 module.exports = router

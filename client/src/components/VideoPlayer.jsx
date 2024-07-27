@@ -1,29 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
 
-function VideoPlayer({ location }) {
-  const [videoSrc, setVideoSrc] = useState("");
-  const videoRef = useRef(null);
-
-  useEffect(() => {
-    const fetchVideo = async () => {
-      try {
-        const response = await fetch(`http://localhost:3001${location}`);
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const videoBlob = await response.blob();
-        const videoUrl = URL.createObjectURL(videoBlob);
-        videoRef.current.src = videoUrl;
-      } catch (err) {
-        console.error("error fetching video", err);
-      }
-    };
-
-    fetchVideo();
-  }, []);
+function VideoPlayer({ videoSrc, videoData }) {
+  // console.log(videoData)
   return (
     <div>
-      <video ref={videoRef} width="500" controls />
+      <video src={videoSrc} width="500" controls />
     </div>
   );
 }
