@@ -7,27 +7,10 @@ function Video() {
   const location = useLocation();
 
   useEffect(() => {
-    const fetchVideo = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:3001${location.pathname}`,
-          { headers: { range: "bytes=0-1023" } }
-        );
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-
-        const videoBlob = await response.blob();
-        const videoUrl = URL.createObjectURL(videoBlob);
-        setVideoSrc(videoUrl);
-      } catch (err) {
-        console.error("error fetching video", err);
-      }
-    };
-
-    fetchVideo();
-  }, []);
-
+    const videoURL = `http://localhost:3001${location.pathname}`;
+    console.log(videoURL)
+    setVideoSrc(videoURL);
+  }, [location.pathname]);
   return <VideoPlayer videoSrc={videoSrc} />;
 }
 
