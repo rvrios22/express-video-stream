@@ -4,12 +4,12 @@ const db = require('../models')
 
 const Folder = db.models.Folder
 
-router.get('/', async (req, res) => {
+router.get('/', async (req, res, next) => {
     try {
         const folders = await Folder.findAll()
         res.json({ success: true, folders })
     } catch (err) {
-        res.status(500).json({ success: false, err })
+        next(err)
     }
 })
 

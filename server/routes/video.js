@@ -9,17 +9,16 @@ const path = require('path')
 const Video = db.models.Video
 const Folder = db.models.Folder
 
-router.get('/', async (req, res) => {
+router.get('/', async (req, res, next) => {
     try {
         const videos = await Video.findAll()
         res.status(200).json({ success: true, videos })
     } catch (err) {
-        res.status(500).json({ success: false, err })
+        next(err)
     }
 })
 
-router.get('/:id', async (req, res) => {
-    console.log('hereadfasdfasdf')
+router.get('/:id', async (req, res, next) => {
     try {
 
         const videoId = req.params.id
@@ -28,8 +27,7 @@ router.get('/:id', async (req, res) => {
                 { id: videoId }
         })
 
-        const videoPath = `public/${video.videoPath}`
-        // const videoPath = path.join(__dirname, '..', video.videoPath)
+        const videoPath = path.join(__dirname, '..', 'public', video.videoPath)
         fs.stat(videoPath, (err, stat) => {
             if (err) {
                 console.error(err)
@@ -37,7 +35,6 @@ router.get('/:id', async (req, res) => {
             }
         })
         const stat = fs.statSync(videoPath);
-        console.log('here', stat)
         const fileSize = stat.size
         const range = req.headers.range;
 
@@ -76,11 +73,11 @@ router.get('/:id', async (req, res) => {
             fs.createReadStream(videoPath).pipe(res)
         }
     } catch (err) {
-        console.error('err', err)
+        next(err)
     }
 })
 
-router.post('/upload', multer.fields([{ name: 'video' }, { name: 'thumbnail' }]), async (req, res) => {
+router.post('/upload', multer.fields([{ name: 'video' }, { name: 'thumbnail' }]), async (req, res, next) => {
     const files = req.files
     const { description, title, folderName } = req.body
     const paths = helpers.getPaths(files)
@@ -101,10 +98,20 @@ router.post('/upload', multer.fields([{ name: 'video' }, { name: 'thumbnail' }])
         })
         res.json({ success: true, video })
     } catch (err) {
-        res.json(err)
+        next(err)
     }
 })
 
-router.delete('/:videoName')
+router.delete('/:id', async (req, res, next) => {
+    try {
+        const videoId = req.params.id
+        const video = await Video.findOne({ where: { id: videoId } })
+        video.destroy()
+        res.json({ success: true, message: 'Video has been deleted' })
+
+    } catch (err) {
+        next(err)
+    }
+})
 
 module.exports = router
