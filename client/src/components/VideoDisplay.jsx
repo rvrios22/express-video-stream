@@ -2,12 +2,32 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 function VideoDisplay({ videoData }) {
+  const handleDeleteVideo = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:3001/video/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Network response not okay");
+      }
+      const data = await response.json();
+      console.log("video deleted", data);
+    } catch (err) {
+      console.error("There was a problem deleting the video", err);
+    }
+  };
   return (
     <>
       <h1>Choose A Video</h1>
       <main className="grid">
         {videoData.map((data) => (
           <div key={data.id} className="thumbnail-container">
+            <button onClick={() => handleDeleteVideo(data.id)}>
+              Delete Video
+            </button>
             <Link to={`video/${data.id}`}>
               <img
                 src={`http://localhost:3001${data.thumbnailPath}`}

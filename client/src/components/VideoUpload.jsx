@@ -110,9 +110,7 @@ function VideoUpload({ folderData }) {
         <input list="folder" name="folder" onChange={handleFolderChange} />
         <datalist id="folder">
           {folderData.map((folder) => (
-            <>
-              <option>{folder.name}</option>
-            </>
+            <option key={folder.id}>{folder.name}</option>
           ))}
         </datalist>
         <label htmlFor="video">Choose a Video: </label>
