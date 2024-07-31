@@ -107,7 +107,7 @@ router.delete('/:id', async (req, res, next) => {
         const videoId = req.params.id
         const video = await Video.findOne({ where: { id: videoId } })
         video.destroy()
-        res.json({ success: true, message: 'Video has been deleted' })
+        res.status(200).json({ success: true, message: 'Video has been deleted' })
 
     } catch (err) {
         next(err)
