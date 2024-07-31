@@ -1,7 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import UpdateModal from "./UpdateModal";
 
-function VideoDisplay({ videoData }) {
+function VideoDisplay({ videoData, folderData }) {
+  const [isUpdateModal, setIsUpdateModal] = useState(false);
+  const [dataToUpdate, setDataToUpdate] = useState();
+
+  const handleUpdateVideo = (id) => {
+    const videoToUpdate = videoData.find((element) => element.id === id);
+    setDataToUpdate(videoToUpdate);
+    setIsUpdateModal(!isUpdateModal);
+  };
   const handleDeleteVideo = async (id) => {
     try {
       const response = await fetch(`http://localhost:3001/video/${id}`, {
@@ -28,6 +37,9 @@ function VideoDisplay({ videoData }) {
             <button onClick={() => handleDeleteVideo(data.id)}>
               Delete Video
             </button>
+            <button onClick={() => handleUpdateVideo(data.id)}>
+              Edit Video
+            </button>
             <Link to={`video/${data.id}`}>
               <img
                 src={`http://localhost:3001${data.thumbnailPath}`}
@@ -38,6 +50,14 @@ function VideoDisplay({ videoData }) {
             <h3>{data.title}</h3>
           </div>
         ))}
+        {isUpdateModal && (
+          <UpdateModal
+            folderData={folderData}
+            dataToUpdate={dataToUpdate}
+            setIsUpdateModal={setIsUpdateModal}
+            isUpdateModal={isUpdateModal}
+          />
+        )}
       </main>
     </>
   );

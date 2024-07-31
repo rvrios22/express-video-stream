@@ -15,3 +15,16 @@ input {
     display: block;
     margin: 0 auto;
 }
+
+#home-page-container {
+    position: relative;
+}
+
+#update-modal {
+    position: absolute;
+    background-color: rgba(128, 128, 128, 0.914);
+    height: 50vh;
+    width: 80%;
+    left: 50%;
+    transform: translate(-50%);
+}

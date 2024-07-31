@@ -36,10 +36,10 @@ function HomePage() {
     fetchFolders();
   }, []);
   return (
-    <>
-      <VideoDisplay videoData={videoData} />
+    <div id="home-page-container">
+      <VideoDisplay videoData={videoData} folderData={folderData} />
       <VideoUpload folderData={folderData} />
-    </>
+    </div>
   );
 }
 
