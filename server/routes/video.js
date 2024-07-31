@@ -4,7 +4,8 @@ const db = require('../models');
 const fs = require('fs');
 const helpers = require('../helpers')
 const multer = require('../multer')
-const path = require('path')
+const path = require('path');
+const { where } = require('sequelize');
 
 const Video = db.models.Video
 const Folder = db.models.Folder
@@ -109,6 +110,26 @@ router.delete('/:id', async (req, res, next) => {
         video.destroy()
         res.status(200).json({ success: true, message: 'Video has been deleted' })
 
+    } catch (err) {
+        next(err)
+    }
+})
+
+router.put('/:id', async (req, res, next) => {
+    try {
+        const videoId = req.params.id
+        const { title, description, folderName } = req.body
+        const video = await Video.findOne({ where: { id: videoId } })
+        let folder = await Folder.findOne({ where: { name: folderName } })
+        if(!folder) {
+            folder = await Folder.create({ name: folderName })
+        }
+        await video.update({
+            title: title,
+            description: description,
+            folderId: folder.id
+        })
+        res.status(200).json({ success: true, message: 'Video update successful' })
     } catch (err) {
         next(err)
     }
