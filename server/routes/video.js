@@ -5,7 +5,6 @@ const fs = require('fs');
 const helpers = require('../helpers')
 const multer = require('../multer')
 const path = require('path');
-const { where } = require('sequelize');
 
 const Video = db.models.Video
 const Folder = db.models.Folder
