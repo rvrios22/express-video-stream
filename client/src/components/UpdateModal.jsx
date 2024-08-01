@@ -6,23 +6,57 @@ function UpdateModal({
   setIsUpdateModal,
   isUpdateModal,
 }) {
-  const [folderToUpdate, setFolderToUpdate] = useState("");
-  const handleUpdateTitle = (e) => {};
-  const handleUpdateDescription = (e) => {};
-  const handleUpdateFolder = (e) => {};
-  const handleUpdateForm = (e) => {
+  const [updateData, setUpdateData] = useState({ ...dataToUpdate });
+
+  const handleUpdateTitle = (e) => {
+    setUpdateData({
+      ...updateData,
+      title: e.target.value,
+    });
+  };
+  const handleUpdateDescription = (e) => {
+    setUpdateData({
+      ...updateData,
+      description: e.target.value,
+    });
+  };
+  const handleUpdateFolder = (e) => {
+    setUpdateData({
+      ...updateData,
+      folder: e.target.value,
+    });
+  };
+  const handleUpdateForm = async (e) => {
     e.preventDefault();
+    let formData = new FormData();
+    formData.append("title", updateData.title);
+    formData.append("description", updateData.description);
+    formData.append("folderName", updateData.folder);
+    for (const pair of formData.entries()) {
+    }
+    try {
+      const response = await fetch(`http://localhost:3001/video/${dataToUpdate.id}`, {
+        method: "PUT",
+        body: formData,
+      });
+    } catch (err) {
+      console.error(err);
+    }
+
     setIsUpdateModal(!isUpdateModal);
   };
   useEffect(() => {
     const folder = folderData.find(({ id }) => id === dataToUpdate.folderId);
-    setFolderToUpdate(folder.name);
+    setUpdateData({
+      ...updateData,
+      folder: folder.name,
+    });
   }, []);
 
   return (
     <div id="update-modal">
       <form
-        method="post"
+        method="PUT"
         encType="multipart/form-data"
         onSubmit={handleUpdateForm}
       >
@@ -35,19 +69,19 @@ function UpdateModal({
           onChange={handleUpdateTitle}
         />
         <label htmlFor="description">Description: </label>
-        <textarea
+        <input
           type="text"
           name="description"
           id="description"
           placeholder={dataToUpdate.description}
           onChange={handleUpdateDescription}
-        ></textarea>
+        />
         <label htmlFor="folder">Choose a Folder:</label>
         <input
           list="folder"
-          name="folder"
+          name="folderName"
           onChange={handleUpdateFolder}
-          placeholder={folderToUpdate}
+          placeholder={updateData.folder}
         />
         <datalist id="folder">
           {folderData.map((folder) => (
