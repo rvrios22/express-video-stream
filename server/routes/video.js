@@ -106,6 +106,17 @@ router.delete('/:id', async (req, res, next) => {
     try {
         const videoId = req.params.id
         const video = await Video.findOne({ where: { id: videoId } })
+        const videoPath = path.join(__dirname, '..', 'public', video.videoPath)
+        fs.stat(videoPath, (err, stat) => {
+            if(err) {
+                next(err)
+            }
+        })
+        fs.unlink(videoPath, (err) => {
+            if(err) {
+                console.log('The video could not be deleted', err)
+            }
+        })
         video.destroy()
         res.status(200).json({ success: true, message: 'Video has been deleted' })
 
@@ -120,7 +131,7 @@ router.put('/:id', multer.none(), async (req, res, next) => {
         const { title, description, folderName } = req.body
         const video = await Video.findOne({ where: { id: videoId } })
         let folder = await Folder.findOne({ where: { name: folderName } })
-        if(!folder) {
+        if (!folder) {
             folder = await Folder.create({ name: folderName })
         }
         await video.update({
