@@ -114,7 +114,7 @@ router.delete('/:id', async (req, res, next) => {
     }
 })
 
-router.put('/:id', async (req, res, next) => {
+router.put('/:id', multer.none(), async (req, res, next) => {
     try {
         const videoId = req.params.id
         const { title, description, folderName } = req.body
