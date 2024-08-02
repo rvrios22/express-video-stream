@@ -14,24 +14,35 @@ function UpdateModal({
       title: e.target.value,
     });
   };
+
   const handleUpdateDescription = (e) => {
     setUpdateData({
       ...updateData,
       description: e.target.value,
     });
   };
+
   const handleUpdateFolder = (e) => {
     setUpdateData({
       ...updateData,
       folder: e.target.value,
     });
   };
+
   const handleUpdateThumbnail = (e) => {
     setUpdateData({
       ...updateData,
-      thumbnail: e.target.files[0]
-    })
-  }
+      thumbnail: e.target.files[0],
+    });
+  };
+
+  const handleUpdateDate = (e) => {
+    setUpdateData({
+      ...updateData,
+      serviceDate: e.target.value,
+    });
+  };
+
   const handleUpdateForm = async (e) => {
     e.preventDefault();
     let formData = new FormData();
@@ -39,18 +50,23 @@ function UpdateModal({
     formData.append("description", updateData.description);
     formData.append("folderName", updateData.folder);
     formData.append("thumbnail", updateData.thumbnail);
+    formData.append("serviceDate", updateData.serviceDate);
     try {
-      const response = await fetch(`http://localhost:3001/video/${dataToUpdate.id}`, {
-        method: "PUT",
-        body: formData,
-      });
-      const data = await response.json()
+      const response = await fetch(
+        `http://localhost:3001/video/${dataToUpdate.id}`,
+        {
+          method: "PUT",
+          body: formData,
+        }
+      );
+      const data = await response.json();
     } catch (err) {
       console.error(err);
     }
 
     setIsUpdateModal(!isUpdateModal);
   };
+
   useEffect(() => {
     const folder = folderData.find(({ id }) => id === dataToUpdate.folderId);
     setUpdateData({
@@ -89,27 +105,25 @@ function UpdateModal({
           onChange={handleUpdateFolder}
           placeholder={updateData.folder}
         />
+        <label htmlFor="serviceDate">New Date:</label>
+        <input
+          type="date"
+          name="serviceDate"
+          id="serviceDate"
+          onChange={handleUpdateDate}
+        />
         <datalist id="folder">
           {folderData.map((folder) => (
             <option key={folder.id}>{folder.name}</option>
           ))}
         </datalist>
-        {/* <label htmlFor="video">Choose a Video: </label>
-        <input
-        type="file"
-        name="video"
-        id="video"
-        accept="video/mp4"
-        required
-        onChange={handleVideoChange}
-        /> */}
         <label htmlFor="thumbnail">Choose a Thumbnail: </label>
         <input
-        type="file"
-        name="thumbnail"
-        id="thumbnail"
-        accept="image/*"
-        onChange={handleUpdateThumbnail}
+          type="file"
+          name="thumbnail"
+          id="thumbnail"
+          accept="image/*"
+          onChange={handleUpdateThumbnail}
         />
         <input type="submit" value="Submit" />
       </form>

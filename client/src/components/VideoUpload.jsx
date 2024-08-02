@@ -7,6 +7,7 @@ function VideoUpload({ folderData }) {
     folder: "",
     video: null,
     thumbnail: null,
+    serviceDate: "",
   });
   const [message, setMessage] = useState("");
 
@@ -45,6 +46,13 @@ function VideoUpload({ folderData }) {
     });
   };
 
+  const handleDateChange = (e) => {
+    setFormData({
+      ...formData,
+      serviceDate: e.target.value,
+    });
+  };
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     const formEntries = new FormData();
@@ -53,6 +61,7 @@ function VideoUpload({ folderData }) {
     formEntries.append("folderName", formData.folder);
     formEntries.append("video", formData.video);
     formEntries.append("thumbnail", formData.thumbnail);
+    formEntries.append("serviceDate", formData.serviceDate);
     try {
       const response = await fetch("http://localhost:3001/video/upload", {
         method: "POST",
@@ -63,21 +72,16 @@ function VideoUpload({ folderData }) {
       }
       const result = await response.json();
       setMessage(`upload successfull: ${result.title}`);
-      setFormData({
-        title: "",
-        description: "",
-        folder: "",
-        video: null,
-        thumbnail: null,
-      });
     } catch (err) {
       console.error(err);
+    } finally {
       setFormData({
         title: "",
         description: "",
         folder: "",
         video: null,
         thumbnail: null,
+        serviceDate: Date.now(),
       });
     }
   };
@@ -113,6 +117,13 @@ function VideoUpload({ folderData }) {
             <option key={folder.id}>{folder.name}</option>
           ))}
         </datalist>
+        <label htmlFor="serviceDate">Sermon Date: </label>
+        <input
+          type="date"
+          name="serviceDate"
+          id="serviceDate"
+          onChange={handleDateChange}
+        />
         <label htmlFor="video">Choose a Video: </label>
         <input
           type="file"

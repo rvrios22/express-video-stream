@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import UpdateModal from "./UpdateModal";
+import { dateCleaner } from "../helpers";
 
 function VideoDisplay({ videoData, folderData }) {
   const [isUpdateModal, setIsUpdateModal] = useState(false);
@@ -11,6 +12,7 @@ function VideoDisplay({ videoData, folderData }) {
     setDataToUpdate(videoToUpdate);
     setIsUpdateModal(!isUpdateModal);
   };
+
   const handleDeleteVideo = async (id) => {
     try {
       const response = await fetch(`http://localhost:3001/video/${id}`, {
@@ -27,6 +29,7 @@ function VideoDisplay({ videoData, folderData }) {
       console.error("There was a problem deleting the video", err);
     }
   };
+  
   return (
     <>
       <h1>Choose A Video</h1>
@@ -47,6 +50,9 @@ function VideoDisplay({ videoData, folderData }) {
               />
             </Link>
             <h3>{data.title}</h3>
+            <p>{data.description}</p>
+            <p>{dateCleaner(data.serviceDate)}</p>
+            <p>{data.serviceDate}</p>
           </div>
         ))}
         {isUpdateModal && (
