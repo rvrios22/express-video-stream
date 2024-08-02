@@ -79,7 +79,7 @@ router.get('/:id', async (req, res, next) => {
 
 router.post('/upload', multer.fields([{ name: 'video' }, { name: 'thumbnail' }]), async (req, res, next) => {
     const files = req.files
-    const { description, title, folderName } = req.body
+    const { description, title, folderName, serviceDate } = req.body
     const paths = helpers.getPaths(files)
     const modifedPaths = helpers.removePublicFromPath(paths)
 
@@ -94,7 +94,8 @@ router.post('/upload', multer.fields([{ name: 'video' }, { name: 'thumbnail' }])
             description: description,
             folderId: folder.id,
             videoPath: modifedPaths[0],
-            thumbnailPath: modifedPaths[1]
+            thumbnailPath: modifedPaths[1],
+            serviceDate: serviceDate
         })
         res.json({ success: true, video })
     } catch (err) {
@@ -129,7 +130,7 @@ router.put('/:id', multer.fields([{ name: 'thumbnail' }]), async (req, res, next
     try {
         const videoId = req.params.id
         const files = req.files
-        const { title, description, folderName } = req.body
+        const { title, description, folderName , serviceDate} = req.body
         const paths = helpers.getPaths(files)
         const modifedPaths = helpers.removePublicFromPath(paths)
         const video = await Video.findOne({ where: { id: videoId } })
@@ -142,10 +143,10 @@ router.put('/:id', multer.fields([{ name: 'thumbnail' }]), async (req, res, next
             title: title,
             description: description,
             folderId: folder.id,
-            thumbnailPath: modifedPaths[0] ? modifedPaths[0] : video.thumbnailPath
+            thumbnailPath: modifedPaths[0] ? modifedPaths[0] : video.thumbnailPath,
+            serviceDate: serviceDate
         })
         if (modifedPaths[0]) {
-
             fs.stat(thumbnailPath, (err, stat) => {
                 if (err) {
                     next(err)
