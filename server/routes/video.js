@@ -108,13 +108,13 @@ router.delete('/:id', async (req, res, next) => {
         const video = await Video.findOne({ where: { id: videoId } })
         const videoPath = path.join(__dirname, '..', 'public', video.videoPath)
         fs.stat(videoPath, (err, stat) => {
-            if(err) {
+            if (err) {
                 next(err)
             }
         })
         fs.unlink(videoPath, (err) => {
-            if(err) {
-                console.log('The video could not be deleted', err)
+            if (err) {
+                next(err)
             }
         })
         video.destroy()
@@ -125,11 +125,15 @@ router.delete('/:id', async (req, res, next) => {
     }
 })
 
-router.put('/:id', multer.none(), async (req, res, next) => {
+router.put('/:id', multer.fields([{ name: 'thumbnail' }]), async (req, res, next) => {
     try {
         const videoId = req.params.id
+        const files = req.files
         const { title, description, folderName } = req.body
+        const paths = helpers.getPaths(files)
+        const modifedPaths = helpers.removePublicFromPath(paths)
         const video = await Video.findOne({ where: { id: videoId } })
+        const thumbnailPath = path.join(__dirname, '..', 'public', video.thumbnailPath)
         let folder = await Folder.findOne({ where: { name: folderName } })
         if (!folder) {
             folder = await Folder.create({ name: folderName })
@@ -137,8 +141,22 @@ router.put('/:id', multer.none(), async (req, res, next) => {
         await video.update({
             title: title,
             description: description,
-            folderId: folder.id
+            folderId: folder.id,
+            thumbnailPath: modifedPaths[0] ? modifedPaths[0] : video.thumbnailPath
         })
+        if (modifedPaths[0]) {
+
+            fs.stat(thumbnailPath, (err, stat) => {
+                if (err) {
+                    next(err)
+                }
+            })
+            fs.unlink(thumbnailPath, (err) => {
+                if (err) {
+                    next(err)
+                }
+            })
+        }
         res.status(200).json({ success: true, message: 'Video update successful' })
     } catch (err) {
         next(err)

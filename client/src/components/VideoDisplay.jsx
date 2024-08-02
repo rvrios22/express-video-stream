@@ -23,7 +23,6 @@ function VideoDisplay({ videoData, folderData }) {
         throw new Error("Network response not okay");
       }
       const data = await response.json();
-      console.log("video deleted", data);
     } catch (err) {
       console.error("There was a problem deleting the video", err);
     }

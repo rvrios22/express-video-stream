@@ -26,19 +26,25 @@ function UpdateModal({
       folder: e.target.value,
     });
   };
+  const handleUpdateThumbnail = (e) => {
+    setUpdateData({
+      ...updateData,
+      thumbnail: e.target.files[0]
+    })
+  }
   const handleUpdateForm = async (e) => {
     e.preventDefault();
     let formData = new FormData();
     formData.append("title", updateData.title);
     formData.append("description", updateData.description);
     formData.append("folderName", updateData.folder);
-    for (const pair of formData.entries()) {
-    }
+    formData.append("thumbnail", updateData.thumbnail);
     try {
       const response = await fetch(`http://localhost:3001/video/${dataToUpdate.id}`, {
         method: "PUT",
         body: formData,
       });
+      const data = await response.json()
     } catch (err) {
       console.error(err);
     }
@@ -96,16 +102,15 @@ function UpdateModal({
         accept="video/mp4"
         required
         onChange={handleVideoChange}
-        />
+        /> */}
         <label htmlFor="thumbnail">Choose a Thumbnail: </label>
         <input
         type="file"
         name="thumbnail"
         id="thumbnail"
         accept="image/*"
-        required
-        onChange={handleThumbnailChange}
-        /> */}
+        onChange={handleUpdateThumbnail}
+        />
         <input type="submit" value="Submit" />
       </form>
     </div>

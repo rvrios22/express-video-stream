@@ -8,7 +8,6 @@ function Video() {
 
   useEffect(() => {
     const videoURL = `http://localhost:3001${location.pathname}`;
-    console.log(videoURL)
     setVideoSrc(videoURL);
   }, [location.pathname]);
   return <VideoPlayer videoSrc={videoSrc} />;
