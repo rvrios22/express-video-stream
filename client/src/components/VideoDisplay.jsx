@@ -1,7 +1,8 @@
 import React, { useState } from "react";
+import { dateCleaner } from "../helpers";
 import { Link } from "react-router-dom";
 import UpdateModal from "./UpdateModal";
-import { dateCleaner } from "../helpers";
+import "../../css/videoDisplay.css";
 
 function VideoDisplay({ videoData, folderData }) {
   const [isUpdateModal, setIsUpdateModal] = useState(false);
@@ -29,30 +30,37 @@ function VideoDisplay({ videoData, folderData }) {
       console.error("There was a problem deleting the video", err);
     }
   };
-  
+
   return (
-    <>
-      <h1>Choose A Video</h1>
-      <main className="grid">
+    <div className="video-display-container font-clamp">
+      <h1 className="video-display-header header">Choose A Video</h1>
+      <main className="video-display-grid">
         {videoData.map((data) => (
-          <div key={data.id} className="thumbnail-container">
-            <button onClick={() => handleDeleteVideo(data.id)}>
-              Delete Video
-            </button>
-            <button onClick={() => handleUpdateVideo(data.id)}>
-              Edit Video
+          <div key={data.id} className="video-display-thumbnail-container">
+            <button
+              className="video-display-delete"
+              onClick={() => handleDeleteVideo(data.id)}
+            >
+              Delete
             </button>
             <Link to={`video/${data.id}`}>
               <img
                 src={`http://localhost:3001${data.thumbnailPath}`}
                 alt={data.description}
-                width="300px"
+                className="video-display-thumbnail"
               />
             </Link>
-            <h3>{data.title}</h3>
-            <p>{data.description}</p>
-            <p>{dateCleaner(data.serviceDate)}</p>
-            <p>{data.serviceDate}</p>
+            <h3 className="video-display-title">{data.title}</h3>
+            <p className="video-display-description">{data.description}</p>
+            <p className="video-display-date">
+              {dateCleaner(data.serviceDate)}
+            </p>
+            <button
+              className="video-display-update"
+              onClick={() => handleUpdateVideo(data.id)}
+            >
+              Edit Video
+            </button>
           </div>
         ))}
         {isUpdateModal && (
@@ -64,7 +72,7 @@ function VideoDisplay({ videoData, folderData }) {
           />
         )}
       </main>
-    </>
+    </div>
   );
 }
 

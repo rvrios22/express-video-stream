@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import "../../css/videoUpload.css";
 
 function VideoUpload({ folderData }) {
   const [formData, setFormData] = useState({
@@ -87,8 +88,8 @@ function VideoUpload({ folderData }) {
   };
 
   return (
-    <>
-      <h2>Upload A Video</h2>
+    <div className="video-upload-container font-clamp">
+      <h2 className="header">Upload A Video</h2>
       <form
         method="post"
         encType="multipart/form-data"
@@ -145,7 +146,7 @@ function VideoUpload({ folderData }) {
         <input type="submit" value="Submit" />
       </form>
       {message && <p>{message}</p>}
-    </>
+    </div>
   );
 }
 

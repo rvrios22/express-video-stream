@@ -77,6 +77,18 @@ router.get('/:id', async (req, res, next) => {
     }
 })
 
+router.get('/data/:id', async (req, res, next) => {
+    try {
+
+        const videoId = req.params.id
+        const video = await Video.findOne({ where: { id: videoId } })
+        res.status(200).json({ success: true, video })
+    } catch (err) {
+        next(err)
+    }
+
+})
+
 router.post('/upload', multer.fields([{ name: 'video' }, { name: 'thumbnail' }]), async (req, res, next) => {
     const files = req.files
     const { description, title, folderName, serviceDate } = req.body
@@ -130,7 +142,7 @@ router.put('/:id', multer.fields([{ name: 'thumbnail' }]), async (req, res, next
     try {
         const videoId = req.params.id
         const files = req.files
-        const { title, description, folderName , serviceDate} = req.body
+        const { title, description, folderName, serviceDate } = req.body
         const paths = helpers.getPaths(files)
         const modifedPaths = helpers.removePublicFromPath(paths)
         const video = await Video.findOne({ where: { id: videoId } })

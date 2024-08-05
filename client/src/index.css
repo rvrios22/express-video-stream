@@ -1,30 +1,36 @@
 :root {
     text-align: center;
 }
-.grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 1em;
+
+body {
+    margin: 0 0 1em;
+    max-width: 1600px;
 }
 
-.thumbnail-container img:hover {
-    cursor: pointer;
-}
-
-input {
+input,
+textarea,
+button {
     display: block;
     margin: 0 auto;
 }
 
-#home-page-container {
-    position: relative;
+.header {
+    font-size: clamp(18px, 4vw, 48px);
 }
 
-#update-modal {
-    position: absolute;
-    background-color: rgba(128, 128, 128, 0.914);
-    height: 50vh;
-    width: 80%;
-    left: 50%;
-    transform: translate(-50%);
+.font-clamp {
+    font-size: clamp(12px, 3vw, 24px);
+}
+
+@media (width > 540px) {
+    .font-clamp {
+
+        font-size: clamp(18px, 2vw, 32px);
+    }
+}
+
+@media (width > 540px) {
+    .font-clamp {
+        font-size: clamp(18px, 2vw, 20px);
+    }
 }
