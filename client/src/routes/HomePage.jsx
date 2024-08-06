@@ -35,6 +35,18 @@ function HomePage() {
 
     fetchFolders();
   }, []);
+
+  const handleOptimisticUpload = (newVideo) => {
+    const originalVideos = [...videoData];
+    const tempId = originalVideos[originalVideos.length - 1].id + 1;
+    const optimisticVideo = {
+      ...newVideo,
+      id: tempId,
+      thumbnailPath: URL.createObjectURL(newVideo.thumbnail),
+    };
+    setVideoData([...videoData, optimisticVideo]);
+    return originalVideos;
+  };
   return (
     <div id="home-page-container">
       <VideoDisplay
@@ -42,7 +54,11 @@ function HomePage() {
         setVideoData={setVideoData}
         folderData={folderData}
       />
-      <VideoUpload folderData={folderData} />
+      <VideoUpload
+        setVideoData={setVideoData}
+        folderData={folderData}
+        handleOptimisticUpload={handleOptimisticUpload}
+      />
     </div>
   );
 }

@@ -58,7 +58,11 @@ function VideoDisplay({ videoData, setVideoData, folderData }) {
             </button>
             <Link to={`video/${data.id}`}>
               <img
-                src={`http://localhost:3001${data.thumbnailPath}`}
+                src={
+                  data.thumbnailPath.includes("blob")
+                    ? data.thumbnailPath
+                    : `http://localhost:3001${data.thumbnailPath}`
+                }
                 alt={data.description}
                 className="video-display-thumbnail"
               />

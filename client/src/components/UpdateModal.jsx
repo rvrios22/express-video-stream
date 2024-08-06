@@ -48,7 +48,17 @@ function UpdateModal({
 
   const handleUpdateForm = async (e) => {
     e.preventDefault();
-    const originalVideos = handleOptomisticUpdate(updateData);
+
+    let updatedThumbnailUrl;
+    if (updateData.thumbnail && updateData.thumbnail instanceof File) {
+      updatedThumbnailUrl = URL.createObjectURL(updateData.thumbnail);
+    }
+    const optimisticUpdateData = {
+      ...updateData,
+      thumbnailPath: updatedThumbnailUrl || updateData.thumbnailPath,
+    };
+
+    const originalVideos = handleOptomisticUpdate(optimisticUpdateData);
     let formData = new FormData();
     formData.append("title", updateData.title);
     formData.append("description", updateData.description);
@@ -68,7 +78,9 @@ function UpdateModal({
       console.error(err);
       setVideoData(originalVideos);
     }
-
+    if (updatedThumbnailUrl) {
+      URL.revokeObjectURL(updatedThumbnailUrl);
+    }
     setIsUpdateModal(!isUpdateModal);
   };
 

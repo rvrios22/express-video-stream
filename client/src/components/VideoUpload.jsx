@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../../css/videoUpload.css";
 
-function VideoUpload({ folderData }) {
+function VideoUpload({ setVideoData, folderData, handleOptimisticUpload }) {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -56,6 +56,17 @@ function VideoUpload({ folderData }) {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    const newVideo = {
+      title: formData.title,
+      description: formData.description,
+      folder: formData.folder,
+      thumbnail: formData.thumbnail,
+      serviceDate: formData.serviceDate,
+      thumbnailPath: "",
+    };
+
+    const originalVideos = handleOptimisticUpload(newVideo);
+
     const formEntries = new FormData();
     formEntries.append("title", formData.title);
     formEntries.append("description", formData.description);
@@ -75,6 +86,7 @@ function VideoUpload({ folderData }) {
       setMessage(`upload successfull: ${result.title}`);
     } catch (err) {
       console.error(err);
+      setVideoData(originalVideos);
     } finally {
       setFormData({
         title: "",
