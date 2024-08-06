@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import UpdateModal from "./UpdateModal";
 import "../../css/videoDisplay.css";
 
-function VideoDisplay({ videoData, folderData }) {
+function VideoDisplay({ videoData, setVideoData, folderData }) {
   const [isUpdateModal, setIsUpdateModal] = useState(false);
   const [dataToUpdate, setDataToUpdate] = useState();
 
@@ -14,7 +14,19 @@ function VideoDisplay({ videoData, folderData }) {
     setIsUpdateModal(!isUpdateModal);
   };
 
+  const handleOptomisticUpdate = (updatedVideo) => {
+    const originalVideos = [...videoData];
+    const updatedVideos = videoData.map((video) =>
+      video.id === updatedVideo.id ? updatedVideo : video
+    );
+    setVideoData(updatedVideos);
+
+    return originalVideos;
+  };
+
   const handleDeleteVideo = async (id) => {
+    const originalVideos = [...videoData];
+    setVideoData(videoData.filter((video) => video.id !== id));
     try {
       const response = await fetch(`http://localhost:3001/video/${id}`, {
         method: "DELETE",
@@ -28,6 +40,7 @@ function VideoDisplay({ videoData, folderData }) {
       const data = await response.json();
     } catch (err) {
       console.error("There was a problem deleting the video", err);
+      setVideoData(originalVideos);
     }
   };
 
@@ -69,6 +82,8 @@ function VideoDisplay({ videoData, folderData }) {
             dataToUpdate={dataToUpdate}
             setIsUpdateModal={setIsUpdateModal}
             isUpdateModal={isUpdateModal}
+            setVideoData={setVideoData}
+            handleOptomisticUpdate={handleOptomisticUpdate}
           />
         )}
       </main>

@@ -6,6 +6,8 @@ function UpdateModal({
   dataToUpdate,
   setIsUpdateModal,
   isUpdateModal,
+  setVideoData,
+  handleOptomisticUpdate,
 }) {
   const [updateData, setUpdateData] = useState({ ...dataToUpdate });
 
@@ -46,6 +48,7 @@ function UpdateModal({
 
   const handleUpdateForm = async (e) => {
     e.preventDefault();
+    const originalVideos = handleOptomisticUpdate(updateData);
     let formData = new FormData();
     formData.append("title", updateData.title);
     formData.append("description", updateData.description);
@@ -63,6 +66,7 @@ function UpdateModal({
       const data = await response.json();
     } catch (err) {
       console.error(err);
+      setVideoData(originalVideos);
     }
 
     setIsUpdateModal(!isUpdateModal);

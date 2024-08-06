@@ -1,0 +1,21 @@
+.video-player-container {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.video-player-video {
+    width: 100%;
+    margin-top: 1em;
+    border-radius: 10px;
+    border: 1px solid rgba(94, 94, 94, 0.623);
+}
+
+.video-player-header {
+    margin: .25em auto 0;
+    text-align: left;
+}
+
+.video-player-text {
+    margin: 0;
+    text-align: left;
+}

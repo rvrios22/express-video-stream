@@ -37,7 +37,11 @@ function HomePage() {
   }, []);
   return (
     <div id="home-page-container">
-      <VideoDisplay videoData={videoData} folderData={folderData} />
+      <VideoDisplay
+        videoData={videoData}
+        setVideoData={setVideoData}
+        folderData={folderData}
+      />
       <VideoUpload folderData={folderData} />
     </div>
   );

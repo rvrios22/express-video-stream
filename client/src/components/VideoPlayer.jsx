@@ -1,19 +1,17 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { dateCleaner } from "../helpers";
+import "../../css/videoPlayer.css";
 
 function VideoPlayer({ videoSrc }) {
-  const [isVideoSrcLoaded, setVideoSrcLoaded] = useState(false);
   const [videoData, setVideoData] = useState();
   const videoRef = useRef();
   const location = useLocation();
   useEffect(() => {
     videoRef.current?.load();
-    setVideoSrcLoaded(true);
   }, [videoSrc]);
 
   useEffect(() => {
-    if (!isVideoSrcLoaded) return;
     const fetchVideoData = async () => {
       try {
         const response = await fetch(
@@ -26,17 +24,19 @@ function VideoPlayer({ videoSrc }) {
       }
     };
     fetchVideoData();
-  }, [isVideoSrcLoaded]);
+  }, []);
 
   return (
-    <div>
-      <video ref={videoRef} width="320" controls>
+    <div className="video-player-container">
+      <video className="video-player-video" ref={videoRef} controls>
         <source src={videoSrc} type="video/mp4" />
         Your browser does not support this video.
       </video>
-      <h1>{videoData?.title}</h1>
-      <p>{videoData?.description}</p>
-      <p>{dateCleaner(videoData.serviceDate)}</p>
+      <h1 className=" video-player-header header">{videoData && videoData.title}</h1>
+      <p className="video-player-text font-clamp">{videoData && videoData.description}</p>
+      <p className="video-player-text font-clamp">
+        {videoData && dateCleaner(videoData.serviceDate)}
+      </p>
     </div>
   );
 }
