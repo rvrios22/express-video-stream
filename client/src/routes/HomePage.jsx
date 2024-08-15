@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import VideoDisplay from "../components/VideoDisplay";
 import VideoUpload from "../components/VideoUpload";
+import FolderSelector from "../components/FolderSelector";
 
 function HomePage() {
   const [videoData, setVideoData] = useState([]);
+  const [originalData, setOriginalData] = useState([]);
   const [folderData, setFolderData] = useState([]);
   //fetches video data
   useEffect(() => {
@@ -15,6 +17,7 @@ function HomePage() {
         }
         const data = await response.json();
         setVideoData(data.videos);
+        setOriginalData(data.videos);
       } catch (err) {
         console.error("something went wrong", err);
       }
@@ -49,6 +52,12 @@ function HomePage() {
   };
   return (
     <div id="home-page-container">
+      <h1 className="header">Choose A Video</h1>
+      <FolderSelector
+        folderData={folderData}
+        setVideoData={setVideoData}
+        originalData={originalData}
+      />
       <VideoDisplay
         videoData={videoData}
         setVideoData={setVideoData}

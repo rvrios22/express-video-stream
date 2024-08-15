@@ -46,7 +46,6 @@ function VideoDisplay({ videoData, setVideoData, folderData }) {
 
   return (
     <div className="video-display-container font-clamp">
-      <h1 className="video-display-header header">Choose A Video</h1>
       <main className="video-display-grid">
         {videoData.map((data) => (
           <div key={data.id} className="video-display-thumbnail-container">
