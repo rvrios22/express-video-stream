@@ -7,6 +7,7 @@ const PORT = 3001;
 const apiRoutes = require('./routes/api')
 const folderRoutes = require('./routes/folder')
 const videoRoutes = require('./routes/video')
+const searchRoutes = require('./routes/search')
 
 app.use(cors())
 app.use(express.json())
@@ -14,6 +15,7 @@ app.use(express.json())
 app.use('/api', apiRoutes)
 app.use('/folder', folderRoutes)
 app.use('/video', videoRoutes)
+app.use('/search', searchRoutes)
 
 //sync db
 db.sequelize.sync({ alter: true, force: false }).then(() => {
