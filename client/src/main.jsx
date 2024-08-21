@@ -3,7 +3,8 @@ import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HomePage from "./routes/HomePage";
 import Video from "./routes/Video";
-import './index.css'
+import "./index.css";
+import SearchResults from "./routes/SearchResults";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -12,6 +13,10 @@ const router = createBrowserRouter([
   {
     path: "/video/:id",
     element: <Video />,
+  },
+  {
+    path: "/search",
+    element: <SearchResults />,
   },
 ]);
 

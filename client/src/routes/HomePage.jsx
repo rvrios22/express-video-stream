@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import VideoDisplay from "../components/VideoDisplay";
 import VideoUpload from "../components/VideoUpload";
 import FolderSelector from "../components/FolderSelector";
+import SearchBar from "../components/SearchBar";
 
 function HomePage() {
   const [videoData, setVideoData] = useState([]);
@@ -53,6 +54,7 @@ function HomePage() {
   return (
     <div id="home-page-container">
       <h1 className="header">Choose A Video</h1>
+      <SearchBar />
       <FolderSelector
         folderData={folderData}
         setVideoData={setVideoData}
